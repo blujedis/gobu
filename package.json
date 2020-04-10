@@ -29,11 +29,11 @@
     "command-exists": "^1.2.8",
     "cross-spawn": "^7.0.1",
     "fast-glob": "^3.1.1",
+    "find-up": "^4.1.0",
     "fs-extra": "^8.1.0",
-    "kawkah-parser": "^1.0.0",
+    "kawkah-parser": "^1.0.4",
     "kricket": "^0.1.1",
-    "log-symbols": "^3.0.0",
-    "progress": "^2.0.3"
+    "log-symbols": "^3.0.0"
   },
   "devDependencies": {
     "@types/ansi-colors": "3.2.2",

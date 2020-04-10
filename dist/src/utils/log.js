@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable no-console */
 const kricket_1 = require("kricket");
 const util_1 = require("util");
 const ansi_colors_1 = require("ansi-colors");
 const log_symbols_1 = require("log-symbols");
 const styles = {
-    fatal: ansi_colors_1.bgRedBright,
+    fatal: (val) => ansi_colors_1.bgRed(ansi_colors_1.black(val)),
     error: ansi_colors_1.redBright,
     warn: ansi_colors_1.yellowBright,
     info: ansi_colors_1.blueBright,
@@ -34,4 +35,12 @@ log.transform((payload) => {
         payload.message = symbolize(payload[kricket_1.LEVEL], payload.message);
     return payload;
 });
+const catchError = (err) => {
+    const name = err.name;
+    const msg = err.message;
+    const stack = err.stack.split('\n').slice(1).join('\n');
+    console.log(ansi_colors_1.redBright(name + ': ' + msg));
+    console.log(ansi_colors_1.gray(stack));
+};
+exports.catchError = catchError;
 //# sourceMappingURL=log.js.map

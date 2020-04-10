@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { createLogger, LEVEL, ConsoleTransport, SPLAT } from 'kricket';
 import { format } from 'util';
-import { redBright, yellowBright, blueBright, magentaBright, bgRedBright } from 'ansi-colors';
+import { redBright, yellowBright, blueBright, magentaBright, black, bgRed, StyleFunction, gray } from 'ansi-colors';
 import { error, warning, info, success } from 'log-symbols';
 
 const styles = {
-  fatal: bgRedBright,
+  fatal: (val) => bgRed(black(val)),
   error: redBright,
   warn: yellowBright,
   info: blueBright,
@@ -40,7 +41,16 @@ log.transform((payload) => {
   return payload;
 });
 
+const catchError = (err: Error) => {
+  const name = err.name;
+  const msg = err.message;
+  const stack = err.stack.split('\n').slice(1).join('\n');
+  console.log(redBright(name + ': ' + msg));
+  console.log(gray(stack));
+};
+
 export {
-  log
+  log,
+  catchError
 };
 
