@@ -3,9 +3,9 @@ import { join, dirname, resolve } from 'path';
 import findUp from 'find-up';
 import glob from 'fast-glob';
 import { IConfig, IPackage, IMap, IScope, Command, ICli } from '../types';
-import { CHILD_KEYS, CONFIG_DEFAULTS } from '../contstants';
-import { promise, merge, simpleClone } from './helpers';
-import { log, catchError } from './log';
+import { CHILD_KEYS } from '../contstants';
+import { promise, merge, simpleClone } from '../utils/helpers';
+import { log, catchError } from '../utils/log';
 import { IKawkahParserResult } from 'kawkah-parser';
 
 /**
@@ -119,45 +119,6 @@ export async function readScopes(globs: string[]) {
   });
 }
 
-/**
- * Reads scopes recursing up building project configuration.
- * 
- * @param defaults default values for the configuration.
- */
-export async function load(defaults: Partial<IConfig> = CONFIG_DEFAULTS) {
-
-  let { data: config } = await promise(readRoot());
-
-  if (!config) {
-    log.alert(`Failed to lookup Gobu config in package.json or "gobu.json".`);
-    return null;
-  }
-
-  config = merge(true, { ...defaults } as IConfig, config);
-
-  // Ensure scopes.
-  if (!config.workspaces || !config.workspaces.length)
-    config.workspaces = [...defaults.workspaces];
-
-  // Change dir so we read scopes from top level down.
-  const cwd = process.cwd();
-  process.chdir(config.directory);
-  const { data: scopes } = await promise(readScopes(config.workspaces));
-  process.chdir(cwd);
-
-  if (scopes && scopes.length) {
-    config.scopes = scopes.reduce((obj, pkg) => {
-      obj[pkg.name] = pkg;
-      return obj;
-    }, {} as IMap<IScope>);
-  }
-  else {
-    config.scopes = {};
-  }
-
-  return config;
-
-}
 
 /**
  * Imports commands for root or child scopes.
@@ -166,7 +127,10 @@ export async function load(defaults: Partial<IConfig> = CONFIG_DEFAULTS) {
  * @param pargs parsed result to pass to command init.
  * @param cli the cli object to pass to command init.
  */
-export function extendCommands(config: IConfig, pargs: IKawkahParserResult, cli: ICli) {
+export function externalCommands(config: IConfig, pargs: IKawkahParserResult, cli: ICli) {
+
+  if (!config)
+    return config;
 
   const entrypoints: string[] = [];
 
@@ -199,6 +163,44 @@ export function extendCommands(config: IConfig, pargs: IKawkahParserResult, cli:
     }
 
   });
+
+  return config;
+
+}
+
+/**
+ * Reads scopes recursing up building project configuration.
+ * 
+ * @param defaults default values for the configuration.
+ */
+export async function load(defaults?: Partial<IConfig>) {
+
+  let { data: config } = await promise(readRoot());
+
+  if (!config)
+    return { ...defaults };
+
+  config = merge(true, { ...defaults } as IConfig, config);
+
+  // Ensure scopes.
+  if (!config.workspaces || !config.workspaces.length)
+    config.workspaces = [...defaults.workspaces];
+
+  // Change dir so we read scopes from top level down.
+  const cwd = process.cwd();
+  process.chdir(config.directory);
+  const { data: scopes } = await promise(readScopes(config.workspaces));
+  process.chdir(cwd);
+
+  if (scopes && scopes.length) {
+    config.scopes = scopes.reduce((obj, pkg) => {
+      obj[pkg.name] = pkg;
+      return obj;
+    }, {} as IMap<IScope>);
+  }
+  else {
+    config.scopes = {};
+  }
 
   return config;
 

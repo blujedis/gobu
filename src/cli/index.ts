@@ -1,26 +1,27 @@
 /* eslint-disable no-console */
 import {
-  parseArgv, buildExample, buildMenu, pkgmgr, log, combineMenuItem,
-  runner, writer, simpleClone, load, catchError, extendCommands
+  parseArgv, buildExample, buildMenu, pkgmgr, log, combineMenuItem, simpleClone, catchError,
 } from '../utils';
+import { externalCommands, load, runner, writer } from '../tools';
+import { ICli, IConfig } from '../types';
 import exec from './exec';
 import passthrough from './passthrough';
-import help from './help';
-import { ICli } from '../types';
 import bootstrap from './bootstrap';
+import enable from './enable';
+import help from './help';
+import { CONFIG_DEFAULTS } from '../contstants';
 
 const pargs = parseArgv();
 let cmd = pargs._[0];
 
 async function init() {
 
-  let config = await load();
+  let config = await load(simpleClone(CONFIG_DEFAULTS)) as IConfig;
 
   // Define cli helpers to pass to external commands.
   const cli: ICli = {
     pargs,
     config,
-    pkgmgr,
     menu: {
       buildCommands: buildMenu,
       buildOptions: buildMenu,
@@ -32,21 +33,19 @@ async function init() {
     log
   };
 
+  // Extend with external commands.
+  config = externalCommands(config, pargs, cli);
 
-  config = extendCommands(config, pargs, cli);
-
-  // Extend any internal commands.
+  // Extend internal commands.
   config.commands.exec = exec(simpleClone(pargs), config);
   config.commands.bootstrap = bootstrap(simpleClone(pargs), config);
+  config.commands.enable = enable(simpleClone(pargs), config);
 
   // Check for global help.
   if (!pargs._raw.length || ((pargs.h || pargs.help) && !cmd)) {
-    process.stdout.write(help(simpleClone(pargs), config) + '\n');
+    process.stdout.write(help(simpleClone(pargs), config, config.commands || {}, true) + '\n');
     return;
   }
-
-  config.commands.exec.help = help(simpleClone(pargs), config);
-  config.commands.bootstrap.help = help(simpleClone(pargs), config);
 
   // Get list of available commands.
   let cmdExists = false;

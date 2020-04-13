@@ -1,4 +1,4 @@
-import { pkgmgr, spawn, spawnSync } from './helpers';
+import { pkgmgr, spawn, spawnSync } from '../utils/helpers';
 import { IRunner, RunnerResult } from '../types';
 import { SpawnSyncReturns, SpawnSyncOptions, SpawnOptions, ChildProcess } from 'child_process';
 

@@ -5,6 +5,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
+const tools_1 = require("../tools");
 const passthrough = (pargs, config) => {
     const cmd = pargs._raw.shift();
     const cwd = process.cwd();
@@ -38,9 +39,9 @@ const passthrough = (pargs, config) => {
             utils_1.log.caution(`Skipping unknown scope(s) "${missing.join(', ')}".`);
         }
         if (isParallel)
-            utils_1.runner.run(spargs, dirs, { stdio: 'inherit' });
+            tools_1.runner.run(spargs, dirs, { stdio: 'inherit' });
         else
-            utils_1.runner.runSync(spargs, dirs, { stdio: 'inherit' });
+            tools_1.runner.runSync(spargs, dirs, { stdio: 'inherit' });
     }
     // Run local script or fallthough to package manager task..
     else {
@@ -49,9 +50,9 @@ const passthrough = (pargs, config) => {
             return;
         }
         if (isParallel)
-            utils_1.runner.run(spargs, { stdio: 'inherit' });
+            tools_1.runner.run(spargs, { stdio: 'inherit' });
         else
-            utils_1.runner.runSync(spargs, { stdio: 'inherit' });
+            tools_1.runner.runSync(spargs, { stdio: 'inherit' });
     }
 };
 exports.default = passthrough;

@@ -1,8 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CONFIG_DEFAULTS = {
-    name: 'Gobu',
+const path_1 = require("path");
+const CWD_NAME = path_1.parse(process.cwd()).name;
+exports.BASE_DEFAULTS = {
+    name: CWD_NAME,
+    command: 'gobu',
     workspaces: ['./packages/*'],
+    packageManager: undefined,
+    entrypoint: undefined
+};
+exports.CONFIG_DEFAULTS = {
+    name: CWD_NAME,
+    command: 'gobu',
+    workspaces: ['./packages/*'],
+    packageManager: undefined,
+    entrypoint: undefined,
     scopes: {},
     commands: {},
     scripts: {},

@@ -3,8 +3,9 @@
  * whichever package manager is installed.
  */
 
-import { Passthrough } from "../types";
-import { isScope, log, getScriptsByDir, isYarn, getScopesByName, normalizeScopes, runner } from '../utils';
+import { Passthrough } from '../types';
+import { isScope, log, getScriptsByDir, isYarn, getScopesByName, normalizeScopes } from '../utils';
+import { runner } from '../tools';
 
 const passthrough: Passthrough = (pargs, config) => {
 

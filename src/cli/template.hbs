@@ -1,0 +1,26 @@
+import { isScope, log } from '../utils';
+import { runner } from '../tools';
+import { Command, ICommand } from '../types';
+
+const {{command}}: Command = (pargs, config) => {
+
+  const isRoot = isScope(config.directory);
+
+  function action() {
+
+  }
+
+  return {
+    name: '{{command}}',
+    description: '{{command}} does something.',
+    alias: 'boot',
+    action,
+    options: [],
+    examples: [
+      '{{name}} {{command}}'
+    ]
+  } as ICommand;
+
+};
+
+export default {{command}};

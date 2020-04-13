@@ -1,5 +1,6 @@
-import { readJSON, readFile, writeFile, writeJSON } from 'fs-extra';
-import { promise } from './helpers';
+import { readFile, writeFile } from 'fs';
+import { promisify } from 'util';
+import { promise } from '../utils/helpers';
 
 /**
  * Reads file.
@@ -17,12 +18,14 @@ export async function read<T>(path: string, asJSON: true): Promise<T>;
 export async function read(path: string): Promise<string>;
 export async function read<T>(path: string, asJSON?: true): Promise<T | string> {
   if (!asJSON) {
-    const { data } = await promise(readFile(path));
+    const { data } = await promise(promisify(readFile)(path));
     return ((data && data.toString()) || null) as string;
   }
   else {
-    const { data } = await promise(readJSON(path));
-    return (data || null) as T;
+    const { data } = await promise(promisify(readFile)(path));
+    if (!data)
+      return null;
+    return (JSON.parse(data.toString())) as T;
   }
 }
 
@@ -44,12 +47,12 @@ export async function write(path: string, data: any, asJSON?: true): Promise<boo
 export async function write(path: string, data: any): Promise<boolean>;
 export async function write(path: string, data: any, asJSON?: true) {
   if (!asJSON) {
-    const { err } = await promise(writeFile(path, data));
+    const { err } = await promise(promisify(writeFile)(path, data));
     if (err)
       return false;
   }
   else {
-    const { err } = await promise(writeJSON(path, data));
+    const { err } = await promise(promisify(writeFile)(path, JSON.stringify(data, null, 2)));
     if (err)
       return false;
   }

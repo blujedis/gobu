@@ -1,4 +1,5 @@
-import { IConfig } from "./types";
+import { IConfig, IConfigBase } from './types';
+export declare const BASE_DEFAULTS: IConfigBase;
 export declare const CONFIG_DEFAULTS: IConfig;
 /**
  * Allowed keys in package.json "gobu" property

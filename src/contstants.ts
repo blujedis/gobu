@@ -1,8 +1,22 @@
-import { IConfig } from "./types";
+import { IConfig, IConfigBase } from './types';
+import { parse } from 'path';
+
+const CWD_NAME = parse(process.cwd()).name;
+
+export const BASE_DEFAULTS: IConfigBase = {
+  name: CWD_NAME,
+  command: 'gobu',
+  workspaces: ['./packages/*'],
+  packageManager: undefined,
+  entrypoint: undefined
+};
 
 export const CONFIG_DEFAULTS: IConfig = {
-  name: 'Gobu',
+  name: CWD_NAME,
+  command: 'gobu',
   workspaces: ['./packages/*'],
+  packageManager: undefined,
+  entrypoint: undefined,
   scopes: {},
   commands: {},
   scripts: {},

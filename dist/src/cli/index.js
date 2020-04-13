@@ -5,40 +5,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-console */
 const utils_1 = require("../utils");
+const tools_1 = require("../tools");
 const exec_1 = __importDefault(require("./exec"));
 const passthrough_1 = __importDefault(require("./passthrough"));
-const help_1 = __importDefault(require("./help"));
 const bootstrap_1 = __importDefault(require("./bootstrap"));
+const enable_1 = __importDefault(require("./enable"));
+const help_1 = __importDefault(require("./help"));
+const contstants_1 = require("../contstants");
 const pargs = utils_1.parseArgv();
 let cmd = pargs._[0];
 async function init() {
-    let config = await utils_1.load();
+    let config = await tools_1.load(utils_1.simpleClone(contstants_1.CONFIG_DEFAULTS));
     // Define cli helpers to pass to external commands.
     const cli = {
         pargs,
         config,
-        pkgmgr: utils_1.pkgmgr,
         menu: {
             buildCommands: utils_1.buildMenu,
             buildOptions: utils_1.buildMenu,
             buildExamples: utils_1.buildExample,
             combineItems: utils_1.combineMenuItem
         },
-        runner: utils_1.runner,
-        writer: utils_1.writer,
+        runner: tools_1.runner,
+        writer: tools_1.writer,
         log: utils_1.log
     };
-    config = utils_1.extendCommands(config, pargs, cli);
-    // Extend any internal commands.
+    // Extend with external commands.
+    config = tools_1.externalCommands(config, pargs, cli);
+    // Extend internal commands.
     config.commands.exec = exec_1.default(utils_1.simpleClone(pargs), config);
     config.commands.bootstrap = bootstrap_1.default(utils_1.simpleClone(pargs), config);
+    config.commands.enable = enable_1.default(utils_1.simpleClone(pargs), config);
     // Check for global help.
     if (!pargs._raw.length || ((pargs.h || pargs.help) && !cmd)) {
-        process.stdout.write(help_1.default(utils_1.simpleClone(pargs), config) + '\n');
+        process.stdout.write(help_1.default(utils_1.simpleClone(pargs), config, config.commands || {}, true) + '\n');
         return;
     }
-    config.commands.exec.help = help_1.default(utils_1.simpleClone(pargs), config);
-    config.commands.bootstrap.help = help_1.default(utils_1.simpleClone(pargs), config);
     // Get list of available commands.
     let cmdExists = false;
     // Look up command by alias if required.

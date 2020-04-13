@@ -131,9 +131,10 @@ export declare function formatTemplate(template: string, map: IMap<string>): str
  * Builds simple string for help menu.
  *
  * @param obj object of commands or array of options to build menu for.
+ * @param name name to replace in strings.
  * @param tabs the number of tabs after key name.
  */
-export declare function buildMenu(obj: IMap<ICommand> | ICommand[] | ICommandItem[], tabs?: number): string;
+export declare function buildMenu(obj: IMap<ICommand> | ICommand[] | ICommandItem[], name?: string, tabs?: number): string;
 /**
  * Formats example menu items replacing {{name}} with provided value.
  *

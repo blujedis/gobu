@@ -1,15 +1,19 @@
 
 import { IKawkahParserResult } from 'kawkah-parser';
 import { StylesType } from 'ansi-colors';
-import { log } from './utils';
 import { ChildProcess, SpawnSyncReturns, SpawnSyncOptions, SpawnOptions } from 'child_process';
-import { Logger, LogMethod, LogMethods } from 'kricket';
+import { Logger, LogMethods } from 'kricket';
 
 export type Command = (pargs?: IKawkahParserResult, config?: IConfig, cli?: ICli) => ICommand;
 
 export type Passthrough = (pargs?: IKawkahParserResult, config?: IConfig) => void;
 
-export type Help = (pargs?: IKawkahParserResult, config?: IConfig) => string;
+export type Help = (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>, isRoot?: boolean) => string;
+
+export interface Help2 {
+  (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>, isRoot?: boolean): string;
+  (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>): string;
+}
 
 export type Filter = RegExp | ((str: string) => boolean);
 
@@ -46,12 +50,14 @@ export interface IScope {
   directory: string;
   color?: Styles;
   entrypoint?: string;
+  hoist?: string[];
 }
 
 export interface ICommandItem {
   name: string;
   alias?: string | string[];
   description?: string;
+  params?: string;
 }
 
 export interface ICommand extends ICommandItem {
@@ -62,24 +68,28 @@ export interface ICommand extends ICommandItem {
   action: () => void;
 }
 
-export interface IConfig {
+export interface IConfigBase {
   name: string;
   command?: string;
+  workspaces?: string[];
+  entrypoint?: string;
+  packageManager?: 'yarn' | 'npm' | 'pnpm' | null;
+}
+
+export interface IConfig extends IConfigBase {
   description?: string;
+  path?: string;
+  isExternal?: boolean;
+  directory?: string;
   version?: string;
   scripts: IMap<string>;
   dependencies: IMap<string>;
   devDependencies: IMap<string>;
   optionalDependencies: IMap<string>;
   peerDependencies: IMap<string>;
-  path?: string;
-  isExternal?: boolean;
-  directory?: string;
-  package?: IPackage;
-  workspaces?: string[];
   scopes?: IMap<IScope>;
-  entrypoint?: string;
   commands?: IMap<ICommand>;
+  hoist?: string[];
 }
 
 export interface IWriter {
@@ -180,12 +190,6 @@ export interface ICli {
   config: IConfig;
 
   /**
-   * The name of the package manager.
-   * either 'npm' or 'yarn'.
-   */
-  pkgmgr: string;
-
-  /**
    * Runs spawn and spawnSync.
    */
   runner: IRunner;
@@ -213,7 +217,7 @@ export interface ICli {
      * @param obj object of commands or array of options to build menu for.
      * @param tabs the number of tabs after key name.
      */
-    buildCommands(obj: IMap<ICommand> | ICommand[] | ICommandItem[], tabs?: number): string;
+    buildCommands(obj: IMap<ICommand> | ICommand[] | ICommandItem[], name?: string, tabs?: number): string;
 
     /**
      * Builds simple string for help menu.
@@ -221,7 +225,7 @@ export interface ICli {
      * @param obj object of commands or array of options to build menu for.
      * @param tabs the number of tabs after key name.
      */
-    buildOptions(obj: IMap<ICommand> | ICommand[] | ICommandItem[], tabs?: number): string;
+    buildOptions(obj: IMap<ICommand> | ICommand[] | ICommandItem[], name?: string, tabs?: number): string;
 
 
     /**

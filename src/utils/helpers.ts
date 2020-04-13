@@ -233,22 +233,21 @@ export function formatTemplate(template: string, map: IMap<string>) {
  * Builds simple string for help menu.
  * 
  * @param obj object of commands or array of options to build menu for.
+ * @param name name to replace in strings.
  * @param tabs the number of tabs after key name.
  */
-export function buildMenu(obj: IMap<ICommand> | ICommand[] | ICommandItem[], tabs: number = 8) {
+export function buildMenu(obj: IMap<ICommand> | ICommand[] | ICommandItem[], name: string = 'Gobu', tabs: number = 8) {
   let arr = obj as ICommand[];
-  const keys: string[] = [];
   if (!Array.isArray(obj))
     arr = Object.keys(obj).map(k => obj[k]);
   // Exclude when menu is false.
   const result = arr.filter(v => v.menu !== false).map(o => {
-    if (keys.includes(o.name))
-      log.caution(`Menu Command or Option "${o.name}" already exist and may be overwritten.`);
-    keys.push(o.name);
     o.alias = o.alias || [];
+    o.description = o.description.replace(/{{name}}/gi, name);
     if (!Array.isArray(o.alias))
       o.alias = [o.alias];
-    o.alias.unshift(o.name);
+    o.alias = o.params ? [...o.alias, o.params] : o.alias;
+    o.alias = [...new Set([o.name, ...o.alias])]; // hack to remove ensure no dupes.
     return [o.alias.join(', '), (o.description || '')];
   });
   const max = result.reduce((a, c) => {
@@ -309,4 +308,4 @@ export function randomNumber(min, max, exclude?: number[]) {
     return num;
   };
   return run();
-}  
+}

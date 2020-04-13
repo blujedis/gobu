@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ansi_colors_1 = require("ansi-colors");
 const utils_1 = require("../utils");
-const help = (pargs, config) => {
+const help = (pargs, config, commands, isRoot) => {
     const command = config.command || 'Gobu';
     const cmds = { ...config.commands };
     const commandStr = utils_1.buildMenu(cmds);
@@ -11,9 +11,8 @@ const help = (pargs, config) => {
         alias: '-h',
         description: 'shows help menu.'
     };
-    const optionConfigs = utils_1.combineMenuItem(cmds, 'options');
-    optionConfigs.push(helpConfig);
-    const optionStr = utils_1.buildMenu(optionConfigs);
+    const optionConfigs = [...utils_1.combineMenuItem(cmds, 'options'), { ...helpConfig }];
+    const optionStr = utils_1.buildMenu({ ...optionConfigs });
     const exampleStr = utils_1.buildExample(utils_1.combineMenuItem(cmds, 'examples'), command);
     const template = `
 -----------------------------------------------------------------------

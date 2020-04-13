@@ -7,7 +7,6 @@ const command_exists_1 = __importDefault(require("command-exists"));
 const kawkah_parser_1 = require("kawkah-parser");
 const cross_spawn_1 = __importDefault(require("cross-spawn"));
 const path_1 = require("path");
-const log_1 = require("./log");
 /**
  * Alias for process.cwd().
  */
@@ -201,22 +200,21 @@ exports.formatTemplate = formatTemplate;
  * Builds simple string for help menu.
  *
  * @param obj object of commands or array of options to build menu for.
+ * @param name name to replace in strings.
  * @param tabs the number of tabs after key name.
  */
-function buildMenu(obj, tabs = 8) {
+function buildMenu(obj, name = 'Gobu', tabs = 8) {
     let arr = obj;
-    const keys = [];
     if (!Array.isArray(obj))
         arr = Object.keys(obj).map(k => obj[k]);
     // Exclude when menu is false.
     const result = arr.filter(v => v.menu !== false).map(o => {
-        if (keys.includes(o.name))
-            log_1.log.caution(`Menu Command or Option "${o.name}" already exist and may be overwritten.`);
-        keys.push(o.name);
         o.alias = o.alias || [];
+        o.description = o.description.replace(/{{name}}/gi, name);
         if (!Array.isArray(o.alias))
             o.alias = [o.alias];
-        o.alias.unshift(o.name);
+        o.alias = o.params ? [...o.alias, o.params] : o.alias;
+        o.alias = [...new Set([o.name, ...o.alias])]; // hack to remove ensure no dupes.
         return [o.alias.join(', '), (o.description || '')];
     });
     const max = result.reduce((a, c) => {

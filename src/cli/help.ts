@@ -1,8 +1,8 @@
 import { blueBright, cyanBright } from 'ansi-colors';
-import { Help, ICommandItem } from '../types';
+import { Help, ICommandItem, ICommand } from '../types';
 import { buildMenu, buildExample, combineMenuItem } from '../utils';
 
-const help: Help = (pargs, config) => {
+const help: Help = (pargs, config, commands, isRoot) => {
 
   const command = config.command || 'Gobu';
   const cmds = { ...config.commands };
@@ -12,9 +12,9 @@ const help: Help = (pargs, config) => {
     alias: '-h',
     description: 'shows help menu.'
   } as ICommandItem;
-  const optionConfigs = combineMenuItem(cmds, 'options');
-  optionConfigs.push(helpConfig);
-  const optionStr = buildMenu(optionConfigs as ICommandItem[]);
+
+  const optionConfigs = [...combineMenuItem<ICommandItem>(cmds, 'options'), { ...helpConfig }];
+  const optionStr = buildMenu({ ...optionConfigs } as ICommandItem[]);
   const exampleStr = buildExample(combineMenuItem(cmds, 'examples'), command);
 
   const template = `

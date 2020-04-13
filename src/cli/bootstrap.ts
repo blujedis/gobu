@@ -1,10 +1,12 @@
-import { isScope, runner, log } from '../utils';
+import { isScope, log, simpleClone } from '../utils';
+import { runner } from '../tools';
+import help from './help';
 import { Command, ICommand, IScope, IMap } from '../types';
-import { ConsoleTransport } from 'kricket';
 
 const bootstrap: Command = (pargs, config) => {
 
   const isRoot = isScope(config.directory);
+  const _help = help(simpleClone(pargs), config);
 
   function action() {
 
@@ -44,12 +46,11 @@ const bootstrap: Command = (pargs, config) => {
   return {
     name: 'bootstrap',
     description: 'bootstraps project(s).',
-    alias: 'boot',
+    alias: ['boot'],
     action,
     options: [],
-    examples: [
-      '{{name}} bootstrap'
-    ]
+    examples: [],
+    help: _help
   } as ICommand;
 
 };

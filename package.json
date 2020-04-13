@@ -1,7 +1,7 @@
 {
   "name": "gobu",
   "license": "ISC",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "bin": {
     "gobu": "./bin/gobu"
@@ -11,7 +11,8 @@
     "build": "tsc -b",
     "watch": "tsc -b -w",
     "test": "mocha test/**/*.spec.ts* --require ./register.js --bail",
-    "docs": "typedoc ./src --options ./typedoc.json --out ./docs && touch ./docs/.nojekyll"
+    "docs": "typedoc ./src --options ./typedoc.json --out ./docs && touch ./docs/.nojekyll",
+    "plop": "plop"
   },
   "repository": {
     "type": "git",

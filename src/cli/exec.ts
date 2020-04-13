@@ -1,6 +1,8 @@
-import { isScope, normalizeScopes, log, isYarn, runner, getScopesByName, writer, randomNumber } from '../utils';
+import { isScope, normalizeScopes, log, isYarn, getScopesByName, randomNumber, simpleClone } from '../utils';
+import { runner, writer } from '../tools';
 import ansi from 'ansi-colors';
 import { BASE_COLORS } from '../contstants';
+import help from './help';
 import { Command, ICommand, IMap, IScope } from '../types';
 
 const exec: Command = (pargs, config) => {
@@ -11,6 +13,7 @@ const exec: Command = (pargs, config) => {
   scopes = scopes.length ? scopes : Object.keys(config.scopes).map(k => config.scopes[k].name);
   const isParallel = (pargs.p || pargs.parallel) as boolean;
   const isRoot = isScope(config.directory);
+  const _help = help(simpleClone(pargs), config);
 
   function action() {
 
@@ -51,7 +54,7 @@ const exec: Command = (pargs, config) => {
 
     // No matching scopes.
     if (!dirs.length) {
-      log.alert(`Command "${script} aborting missing scope(s) "${missing.join(', ')}".`);
+      log.alert(`Command exec using "${script} aborting, no scopes defined.`);
       return;
     }
     else if (missing.length) {
@@ -78,12 +81,13 @@ const exec: Command = (pargs, config) => {
   return {
     name: 'exec',
     description: 'executes in all packages.',
-    alias: 'e',
+    alias: 'ex',
     action,
     options: [
       {
         name: '--scope',
-        alias: ['--scopes'],
+        alias: [],
+        params: '<name>',
         description: 'limits to specified packages.'
       },
       {
@@ -94,8 +98,10 @@ const exec: Command = (pargs, config) => {
     ],
     examples: [
       '{{name}} exec build',
-      '{{name}} exec build --scope={app1,app2}'
-    ]
+      '{{name}} exec build --scope app2',
+      '{{name}} exec build --scope={app1,app2}',
+    ],
+    help: _help
   } as ICommand;
 
 };
