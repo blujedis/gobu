@@ -16,32 +16,6 @@ export declare type Styles = keyof StylesType<any> | keyof StylesType<any>[];
 export interface IMap<T> {
     [key: string]: T;
 }
-export interface IPackage {
-    name?: string;
-    description?: string;
-    version?: string;
-    scripts?: IMap<string>;
-    dependencies?: IMap<string>;
-    devDependencies?: IMap<string>;
-    peerDependencies?: IMap<string>;
-    optionalDependencies?: IMap<string>;
-    gobu?: IConfig;
-}
-export interface IScope {
-    name: string;
-    version: string;
-    description: string;
-    scripts: IMap<string>;
-    dependencies: IMap<string>;
-    devDependencies: IMap<string>;
-    optionalDependencies: IMap<string>;
-    peerDependencies: IMap<string>;
-    path: string;
-    directory: string;
-    color?: Styles;
-    entrypoint?: string;
-    hoist?: string[];
-}
 export interface ICommandItem {
     name: string;
     alias?: string | string[];
@@ -55,27 +29,35 @@ export interface ICommand extends ICommandItem {
     menu?: boolean;
     action: () => void;
 }
+export interface IPackage {
+    name: string;
+    description?: string;
+    version?: string;
+    scripts: IMap<string>;
+    dependencies: IMap<string>;
+    devDependencies: IMap<string>;
+    peerDependencies: IMap<string>;
+    optionalDependencies: IMap<string>;
+    gobu?: IConfigBase;
+}
+export interface IScope extends Omit<IPackage, 'gobu'> {
+    directory?: string;
+    path?: string;
+    entrypoint?: string;
+    color?: Styles;
+}
 export interface IConfigBase {
     name: string;
     command?: string;
     workspaces?: string[];
     entrypoint?: string;
     packageManager?: 'yarn' | 'npm' | 'pnpm' | null;
+    hoist?: string[];
 }
-export interface IConfig extends IConfigBase {
-    description?: string;
-    path?: string;
-    isExternal?: boolean;
-    directory?: string;
-    version?: string;
-    scripts: IMap<string>;
-    dependencies: IMap<string>;
-    devDependencies: IMap<string>;
-    optionalDependencies: IMap<string>;
-    peerDependencies: IMap<string>;
+export interface IConfig extends IConfigBase, Omit<IScope, 'hoist'> {
     scopes?: IMap<IScope>;
     commands?: IMap<ICommand>;
-    hoist?: string[];
+    isExternal?: boolean;
 }
 export interface IWriter {
     /**

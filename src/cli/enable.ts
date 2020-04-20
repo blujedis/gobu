@@ -28,7 +28,7 @@ const enable: Command = (pargs, config) => {
 
       const status = pkgData ? 'updated' : 'enabled';
 
-      pkgData = pkgData || {};
+      pkgData = pkgData || {} as any;
 
       const mergedBase = { ...BASE_DEFAULTS, ...pkgData.gobu };
       const { name, command, workspaces, entrypoint, packageManager } = mergedBase;

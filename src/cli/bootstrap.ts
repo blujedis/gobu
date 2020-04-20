@@ -7,6 +7,7 @@ const bootstrap: Command = (pargs, config) => {
 
   const isRoot = isScope(config.directory);
   const _help = help(simpleClone(pargs), config);
+  const hoist = config.hoist;
 
   function action() {
 

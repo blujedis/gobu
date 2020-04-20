@@ -54,6 +54,9 @@ const exec = (pargs, config) => {
             utils_1.log.caution(`Skipping scope(s) "${missing.join(', ')}" unknown or missing script "${script}".`);
         }
         if (isParallel) {
+            const options = {};
+            if (!isParallel)
+                options.stdio = 'inherit';
             const children = tools_1.runner.run(spargs, dirs);
             const nums = [];
             children.forEach(child => {
@@ -61,7 +64,8 @@ const exec = (pargs, config) => {
                 const num = utils_1.randomNumber(0, contstants_1.BASE_COLORS.length, nums);
                 nums.push(num);
                 const transform = ansi_colors_1.default[scope.color] || ansi_colors_1.default[contstants_1.BASE_COLORS[num]];
-                child.stdout.on('data', tools_1.writer.write(scope.name, transform, scopes));
+                if (child.stdout && child.stdout.on)
+                    child.stdout.on('data', tools_1.writer.write(scope.name, transform, scopes));
             });
         }
         else {

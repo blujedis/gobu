@@ -62,6 +62,9 @@ const exec: Command = (pargs, config) => {
     }
 
     if (isParallel) {
+      const options: any = {};
+      if (!isParallel)
+        options.stdio = 'inherit';
       const children = runner.run(spargs, dirs);
       const nums = [];
       children.forEach(child => {
@@ -69,7 +72,8 @@ const exec: Command = (pargs, config) => {
         const num = randomNumber(0, BASE_COLORS.length, nums);
         nums.push(num);
         const transform = ansi[scope.color] || ansi[BASE_COLORS[num]];
-        child.stdout.on('data', writer.write(scope.name, transform, scopes));
+        if (child.stdout && child.stdout.on)
+          child.stdout.on('data', writer.write(scope.name, transform, scopes));
       });
     }
     else {

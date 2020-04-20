@@ -30,22 +30,23 @@ export declare function externalCommands(config: IConfig, pargs: IKawkahParserRe
  * @param defaults default values for the configuration.
  */
 export declare function load(defaults?: Partial<IConfig>): Promise<{
-    description?: string;
-    path?: string;
-    isExternal?: boolean;
-    directory?: string;
-    version?: string;
-    scripts?: IMap<string>;
-    dependencies?: IMap<string>;
-    devDependencies?: IMap<string>;
-    optionalDependencies?: IMap<string>;
-    peerDependencies?: IMap<string>;
     scopes?: IMap<IScope>;
     commands?: IMap<import("../types").ICommand>;
-    hoist?: string[];
+    isExternal?: boolean;
     name?: string;
     command?: string;
     workspaces?: string[];
     entrypoint?: string;
     packageManager?: "yarn" | "npm" | "pnpm";
+    hoist?: string[];
+    description?: string;
+    version?: string;
+    scripts?: IMap<string>;
+    dependencies?: IMap<string>;
+    devDependencies?: IMap<string>;
+    peerDependencies?: IMap<string>;
+    optionalDependencies?: IMap<string>;
+    directory?: string;
+    path?: string;
+    color?: import("../types").Styles;
 }>;

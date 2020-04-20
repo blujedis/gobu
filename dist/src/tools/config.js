@@ -64,6 +64,8 @@ async function readRoot() {
         config.path = configs[0];
         config.directory = path_1.dirname(configs[0]);
     }
+    config.hoist = config.hoist || [];
+    config.workspaces = config.workspaces || [];
     return config;
 }
 exports.readRoot = readRoot;

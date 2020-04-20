@@ -9,6 +9,7 @@ const help_1 = __importDefault(require("./help"));
 const bootstrap = (pargs, config) => {
     const isRoot = utils_1.isScope(config.directory);
     const _help = help_1.default(utils_1.simpleClone(pargs), config);
+    const hoist = config.hoist;
     function action() {
         if (!isRoot) {
             utils_1.log.alert(`Bootstrap must be run from root directory.`);
