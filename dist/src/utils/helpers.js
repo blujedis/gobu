@@ -7,6 +7,7 @@ const command_exists_1 = __importDefault(require("command-exists"));
 const kawkah_parser_1 = require("kawkah-parser");
 const cross_spawn_1 = __importDefault(require("cross-spawn"));
 const path_1 = require("path");
+const micromatch_1 = __importDefault(require("micromatch"));
 /**
  * Alias for process.cwd().
  */
@@ -277,4 +278,21 @@ function randomNumber(min, max, exclude) {
     return run();
 }
 exports.randomNumber = randomNumber;
+/**
+ * Parses modules object building install/add string for modules to be installed.
+ *
+ * @param modules the object containing the modules to be installed.
+ * @param filters string array containing filters.
+ */
+function filterModules(modules, filters = []) {
+    const keys = Object.keys(modules || {});
+    filters = Array.from(new Set(filters));
+    const matched = micromatch_1.default(keys, filters);
+    const unmatched = keys.filter(k => !matched.includes(k));
+    return {
+        matched,
+        unmatched
+    };
+}
+exports.filterModules = filterModules;
 //# sourceMappingURL=helpers.js.map

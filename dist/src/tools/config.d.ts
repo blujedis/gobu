@@ -15,7 +15,7 @@ export declare function readPackage(filename: string): Promise<unknown>;
  *
  * @param globs the globs of paths representing scoped workspaces.
  */
-export declare function readScopes(globs: string[]): Promise<IScope[]>;
+export declare function readScopes(globs?: string[]): Promise<IScope[]>;
 /**
  * Imports commands for root or child scopes.
  *
@@ -33,12 +33,12 @@ export declare function load(defaults?: Partial<IConfig>): Promise<{
     scopes?: IMap<IScope>;
     commands?: IMap<import("../types").ICommand>;
     isExternal?: boolean;
+    packageManager?: "yarn" | "npm";
     name?: string;
     command?: string;
     workspaces?: string[];
     entrypoint?: string;
-    packageManager?: "yarn" | "npm" | "pnpm";
-    hoist?: string[];
+    nohoist?: string[];
     description?: string;
     version?: string;
     scripts?: IMap<string>;

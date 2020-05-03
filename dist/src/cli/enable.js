@@ -25,8 +25,8 @@ const enable = (pargs, config) => {
             const status = pkgData ? 'updated' : 'enabled';
             pkgData = pkgData || {};
             const mergedBase = { ...contstants_1.BASE_DEFAULTS, ...pkgData.gobu };
-            const { name, command, workspaces, entrypoint, packageManager } = mergedBase;
-            pkgData.gobu = { name, command, workspaces, entrypoint, packageManager };
+            const { name, command, workspaces, entrypoint } = mergedBase;
+            pkgData.gobu = { name, command, workspaces, entrypoint };
             // Write back with defaults.
             const { err: serr } = await utils_1.promise(tools_1.write(path_1.join(config.directory || process.cwd(), 'package.json'), pkgData, true));
             if (serr)

@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IConfigBase | Octo</title>
-	<meta name="description" content="Documentation for Octo">
+	<title>IConfigBase | Gobu</title>
+	<meta name="description" content="Documentation for Gobu">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Octo</a>
+					<a href="../index.html" class="title">Gobu</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -92,7 +92,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#command" class="tsd-kind-icon">command</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#entrypoint" class="tsd-kind-icon">entrypoint</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#packagemanager" class="tsd-kind-icon">package<wbr>Manager</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#nohoist" class="tsd-kind-icon">nohoist</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iconfigbase.html#workspaces" class="tsd-kind-icon">workspaces</a></li>
 							</ul>
 						</section>
@@ -107,9 +107,14 @@
 					<div class="tsd-signature tsd-kind-icon">command<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L73">types.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L131">types.ts:131</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The command name to use (default: gobu)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="entrypoint" class="tsd-anchor"></a>
@@ -117,9 +122,14 @@
 					<div class="tsd-signature tsd-kind-icon">entrypoint<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L75">types.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L142">types.ts:142</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Entrypoint where commands should be required and extended from.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
@@ -127,19 +137,29 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L72">types.ts:72</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L126">types.ts:126</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Then name of the repo.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="packagemanager" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> package<wbr>Manager</h3>
-					<div class="tsd-signature tsd-kind-icon">package<wbr>Manager<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"yarn"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"npm"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"pnpm"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<a name="nohoist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> nohoist</h3>
+					<div class="tsd-signature tsd-kind-icon">nohoist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L76">types.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L147">types.ts:147</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Packages that should NOT be hoisted to the root supports globs.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="workspaces" class="tsd-anchor"></a>
@@ -147,9 +167,14 @@
 					<div class="tsd-signature tsd-kind-icon">workspaces<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L74">types.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L136">types.ts:136</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Array of globs where workspace/packages reside.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -244,7 +269,7 @@
 								<a href="_types_.iconfigbase.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iconfigbase.html#packagemanager" class="tsd-kind-icon">package<wbr>Manager</a>
+								<a href="_types_.iconfigbase.html#nohoist" class="tsd-kind-icon">nohoist</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_types_.iconfigbase.html#workspaces" class="tsd-kind-icon">workspaces</a>

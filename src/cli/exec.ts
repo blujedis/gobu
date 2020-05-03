@@ -1,4 +1,4 @@
-import { isScope, normalizeScopes, log, isYarn, getScopesByName, randomNumber, simpleClone } from '../utils';
+import { isScope, normalizeScopes, log, getScopesByName, randomNumber, simpleClone } from '../utils';
 import { runner, writer } from '../tools';
 import ansi from 'ansi-colors';
 import { BASE_COLORS } from '../contstants';
@@ -29,7 +29,7 @@ const exec: Command = (pargs, config) => {
 
     const spargs = [script, ...pargs.__];
 
-    if (!isYarn)
+    if (config.command === 'npm')
       spargs.unshift('run');
 
     // Container for missing scope/script commands.
@@ -38,6 +38,7 @@ const exec: Command = (pargs, config) => {
     // Map of directory to scope
     // used for managing child processes.
     const map: IMap<IScope> = {};
+
 
     const dirs = getScopesByName(scopes, config.scopes).filter((s, i) => {
       if (!s) {
@@ -65,7 +66,7 @@ const exec: Command = (pargs, config) => {
       const options: any = {};
       if (!isParallel)
         options.stdio = 'inherit';
-      const children = runner.run(spargs, dirs);
+      const children = runner.runScope(spargs, dirs);
       const nums = [];
       children.forEach(child => {
         const scope = map[child.directory];
@@ -77,7 +78,7 @@ const exec: Command = (pargs, config) => {
       });
     }
     else {
-      runner.runSync(spargs, dirs, { stdio: 'inherit' });
+      runner.runScopeSync(spargs, dirs, { stdio: 'inherit' });
     }
 
   }

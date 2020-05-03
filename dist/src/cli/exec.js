@@ -26,7 +26,7 @@ const exec = (pargs, config) => {
             return;
         }
         const spargs = [script, ...pargs.__];
-        if (!utils_1.isYarn)
+        if (config.command === 'npm')
             spargs.unshift('run');
         // Container for missing scope/script commands.
         const missing = [];
@@ -57,7 +57,7 @@ const exec = (pargs, config) => {
             const options = {};
             if (!isParallel)
                 options.stdio = 'inherit';
-            const children = tools_1.runner.run(spargs, dirs);
+            const children = tools_1.runner.runScope(spargs, dirs);
             const nums = [];
             children.forEach(child => {
                 const scope = map[child.directory];
@@ -69,7 +69,7 @@ const exec = (pargs, config) => {
             });
         }
         else {
-            tools_1.runner.runSync(spargs, dirs, { stdio: 'inherit' });
+            tools_1.runner.runScopeSync(spargs, dirs, { stdio: 'inherit' });
         }
     }
     return {

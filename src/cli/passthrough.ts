@@ -49,9 +49,9 @@ const passthrough: Passthrough = (pargs, config) => {
     }
 
     if (isParallel)
-      runner.run(spargs, dirs, { stdio: 'inherit' });
+      runner.runScope(spargs, dirs, { stdio: 'inherit' });
     else
-      runner.runSync(spargs, dirs, { stdio: 'inherit' });
+      runner.runScopeSync(spargs, dirs, { stdio: 'inherit' });
 
   }
 
@@ -62,9 +62,9 @@ const passthrough: Passthrough = (pargs, config) => {
       return;
     }
     if (isParallel)
-      runner.run(spargs, { stdio: 'inherit' });
+      runner.runScope(spargs, { stdio: 'inherit' });
     else
-      runner.runSync(spargs, { stdio: 'inherit' });
+      runner.runScopeSync(spargs, { stdio: 'inherit' });
   }
 
 };

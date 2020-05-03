@@ -4,7 +4,7 @@ import findUp from 'find-up';
 import glob from 'fast-glob';
 import { IConfig, IPackage, IMap, IScope, Command, ICli } from '../types';
 import { CHILD_KEYS } from '../contstants';
-import { promise, merge, simpleClone } from '../utils/helpers';
+import { promise, merge, simpleClone, pkgmgr } from '../utils/helpers';
 import { log, catchError } from '../utils/log';
 import { IKawkahParserResult } from 'kawkah-parser';
 
@@ -67,8 +67,10 @@ export async function readRoot() {
     config.directory = dirname(configs[0]);
   }
 
-  config.hoist = config.hoist || [];
+  config.nohoist = config.nohoist || [];
   config.workspaces = config.workspaces || [];
+  // @ts-ignore
+  config.packageManager = pkgmgr;
 
   return config;
 
@@ -89,9 +91,8 @@ export async function readPackage(filename: string) {
  * 
  * @param globs the globs of paths representing scoped workspaces.
  */
-export async function readScopes(globs: string[]) {
-  if (!globs.includes('.'))
-    globs.push('./*');
+export async function readScopes(globs: string[] = []) {
+  globs = globs.map(v => './' + v.replace(/^\.?\/?/, ''));
   const dirs = await glob(globs, { onlyDirectories: true, ignore: ['**/node_modules/**'] });
   const proms = dirs.map(async (path) => {
     const pkg = await readPackage(join(path, 'package.json')) as IMap<any>;
@@ -107,7 +108,8 @@ export async function readScopes(globs: string[]) {
         dependencies: pkg.dependencies || {},
         devDependencies: pkg.devDependencies || {},
         optionalDependencies: pkg.optionalDependencies || {},
-        peerDependencies: pkg.peerDependencies || {}
+        peerDependencies: pkg.peerDependencies || {},
+        nohoist: conf.hoist || []
       };
       CHILD_KEYS.forEach(k => {
         if (typeof conf[k] !== 'undefined')
@@ -204,6 +206,9 @@ export async function load(defaults?: Partial<IConfig>) {
   else {
     config.scopes = {};
   }
+
+  if (!config.command)
+    config.command = pkgmgr;
 
   return config;
 

@@ -7,7 +7,6 @@ export const BASE_DEFAULTS: IConfigBase = {
   name: CWD_NAME,
   command: 'gobu',
   workspaces: ['./packages/*'],
-  packageManager: undefined,
   entrypoint: undefined
 };
 
@@ -15,7 +14,6 @@ export const CONFIG_DEFAULTS: IConfig = {
   name: CWD_NAME,
   command: 'gobu',
   workspaces: ['./packages/*'],
-  packageManager: undefined,
   entrypoint: undefined,
   scopes: {},
   commands: {},

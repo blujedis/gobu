@@ -157,3 +157,13 @@ export declare function combineMenuItem<T>(obj: IMap<ICommand>, key: keyof IComm
  * @param exclude numbers to exclude.
  */
 export declare function randomNumber(min: any, max: any, exclude?: number[]): any;
+/**
+ * Parses modules object building install/add string for modules to be installed.
+ *
+ * @param modules the object containing the modules to be installed.
+ * @param filters string array containing filters.
+ */
+export declare function filterModules(modules: IMap<string>, filters?: string[]): {
+    matched: string[];
+    unmatched: string[];
+};

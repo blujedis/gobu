@@ -7,7 +7,7 @@ const bootstrap: Command = (pargs, config) => {
 
   const isRoot = isScope(config.directory);
   const _help = help(simpleClone(pargs), config);
-  const hoist = config.hoist;
+  const hoist = config.nohoist;
 
   function action() {
 
@@ -36,7 +36,7 @@ const bootstrap: Command = (pargs, config) => {
     // Add root directory.
     dirs.unshift(config.directory);
 
-    const children = runner.run(spargs, dirs, { stdio: 'inherit' });
+    const children = runner.runScope(spargs, dirs, { stdio: 'inherit' });
 
     children.forEach(child => {
       const scope = map[child.directory];
@@ -57,3 +57,7 @@ const bootstrap: Command = (pargs, config) => {
 };
 
 export default bootstrap;
+
+      // const modules = isProd ? { ...scope.dependencies, ...scope.devDependencies } : scope.dependencies;
+      // const filtered = filterModules(modules, [...rootHoist, ...scope.nohoist]);
+

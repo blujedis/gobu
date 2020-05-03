@@ -31,8 +31,8 @@ const enable: Command = (pargs, config) => {
       pkgData = pkgData || {} as any;
 
       const mergedBase = { ...BASE_DEFAULTS, ...pkgData.gobu };
-      const { name, command, workspaces, entrypoint, packageManager } = mergedBase;
-      pkgData.gobu = { name, command, workspaces, entrypoint, packageManager } as IConfig;
+      const { name, command, workspaces, entrypoint } = mergedBase;
+      pkgData.gobu = { name, command, workspaces, entrypoint } as IConfig;
 
       // Write back with defaults.
       const { err: serr } = await promise(write(join(config.directory || process.cwd(), 'package.json'), pkgData, true));

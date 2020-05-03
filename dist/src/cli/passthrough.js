@@ -39,9 +39,9 @@ const passthrough = (pargs, config) => {
             utils_1.log.caution(`Skipping unknown scope(s) "${missing.join(', ')}".`);
         }
         if (isParallel)
-            tools_1.runner.run(spargs, dirs, { stdio: 'inherit' });
+            tools_1.runner.runScope(spargs, dirs, { stdio: 'inherit' });
         else
-            tools_1.runner.runSync(spargs, dirs, { stdio: 'inherit' });
+            tools_1.runner.runScopeSync(spargs, dirs, { stdio: 'inherit' });
     }
     // Run local script or fallthough to package manager task..
     else {
@@ -50,9 +50,9 @@ const passthrough = (pargs, config) => {
             return;
         }
         if (isParallel)
-            tools_1.runner.run(spargs, { stdio: 'inherit' });
+            tools_1.runner.runScope(spargs, { stdio: 'inherit' });
         else
-            tools_1.runner.runSync(spargs, { stdio: 'inherit' });
+            tools_1.runner.runScopeSync(spargs, { stdio: 'inherit' });
     }
 };
 exports.default = passthrough;

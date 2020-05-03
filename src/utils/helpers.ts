@@ -2,8 +2,9 @@ import commandExists from 'command-exists';
 import { parse } from 'kawkah-parser';
 import cs from 'cross-spawn';
 import { resolve } from 'path';
+import matcher from 'micromatch';
 import { IMap, IScope, ICommand, ICommandItem } from '../types';
-import { log } from './log';
+
 
 /**
  * Alias for process.cwd().
@@ -308,4 +309,21 @@ export function randomNumber(min, max, exclude?: number[]) {
     return num;
   };
   return run();
+}
+
+/**
+ * Parses modules object building install/add string for modules to be installed.
+ * 
+ * @param modules the object containing the modules to be installed.
+ * @param filters string array containing filters. 
+ */
+export function filterModules(modules: IMap<string>, filters: string[] = []) {
+  const keys = Object.keys(modules || {});
+  filters = Array.from(new Set(filters));
+  const matched = matcher(keys, filters);
+  const unmatched = keys.filter(k => !matched.includes(k));
+  return {
+    matched,
+    unmatched
+  };
 }

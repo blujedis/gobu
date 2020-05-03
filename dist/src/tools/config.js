@@ -64,8 +64,10 @@ async function readRoot() {
         config.path = configs[0];
         config.directory = path_1.dirname(configs[0]);
     }
-    config.hoist = config.hoist || [];
+    config.nohoist = config.nohoist || [];
     config.workspaces = config.workspaces || [];
+    // @ts-ignore
+    config.packageManager = helpers_1.pkgmgr;
     return config;
 }
 exports.readRoot = readRoot;
@@ -84,9 +86,8 @@ exports.readPackage = readPackage;
  *
  * @param globs the globs of paths representing scoped workspaces.
  */
-async function readScopes(globs) {
-    if (!globs.includes('.'))
-        globs.push('./*');
+async function readScopes(globs = []) {
+    globs = globs.map(v => './' + v.replace(/^\.?\/?/, ''));
     const dirs = await fast_glob_1.default(globs, { onlyDirectories: true, ignore: ['**/node_modules/**'] });
     const proms = dirs.map(async (path) => {
         const pkg = await readPackage(path_1.join(path, 'package.json'));
@@ -102,7 +103,8 @@ async function readScopes(globs) {
                 dependencies: pkg.dependencies || {},
                 devDependencies: pkg.devDependencies || {},
                 optionalDependencies: pkg.optionalDependencies || {},
-                peerDependencies: pkg.peerDependencies || {}
+                peerDependencies: pkg.peerDependencies || {},
+                nohoist: conf.hoist || []
             };
             contstants_1.CHILD_KEYS.forEach(k => {
                 if (typeof conf[k] !== 'undefined')
@@ -181,6 +183,8 @@ async function load(defaults) {
     else {
         config.scopes = {};
     }
+    if (!config.command)
+        config.command = helpers_1.pkgmgr;
     return config;
 }
 exports.load = load;

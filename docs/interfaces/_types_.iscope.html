@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IScope | Octo</title>
-	<meta name="description" content="Documentation for Octo">
+	<title>IScope | Gobu</title>
+	<meta name="description" content="Documentation for Gobu">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Octo</a>
+					<a href="../index.html" class="title">Gobu</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -73,7 +73,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IScope</span>
+						<span class="tsd-signature-symbol">{}</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">IScope</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -85,18 +90,10 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#color" class="tsd-kind-icon">color</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#dependencies" class="tsd-kind-icon">dependencies</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#devdependencies" class="tsd-kind-icon">dev<wbr>Dependencies</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#directory" class="tsd-kind-icon">directory</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#entrypoint" class="tsd-kind-icon">entrypoint</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#hoist" class="tsd-kind-icon">hoist</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#optionaldependencies" class="tsd-kind-icon">optional<wbr>Dependencies</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#nohoist" class="tsd-kind-icon">nohoist</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#path" class="tsd-kind-icon">path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#peerdependencies" class="tsd-kind-icon">peer<wbr>Dependencies</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#scripts" class="tsd-kind-icon">scripts</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.iscope.html#version" class="tsd-kind-icon">version</a></li>
 							</ul>
 						</section>
 					</div>
@@ -110,49 +107,29 @@
 					<div class="tsd-signature tsd-kind-icon">color<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_.html#styles" class="tsd-signature-type">Styles</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L51">types.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L112">types.ts:112</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="dependencies" class="tsd-anchor"></a>
-					<h3>dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">dependencies<span class="tsd-signature-symbol">:</span> <a href="_types_.imap.html" class="tsd-signature-type">IMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L45">types.ts:45</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="description" class="tsd-anchor"></a>
-					<h3>description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L43">types.ts:43</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="devdependencies" class="tsd-anchor"></a>
-					<h3>dev<wbr>Dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">dev<wbr>Dependencies<span class="tsd-signature-symbol">:</span> <a href="_types_.imap.html" class="tsd-signature-type">IMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L46">types.ts:46</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The color to use in logs when running async.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="directory" class="tsd-anchor"></a>
-					<h3>directory</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> directory</h3>
 					<div class="tsd-signature tsd-kind-icon">directory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L50">types.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L97">types.ts:97</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The directory where the scope resides.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="entrypoint" class="tsd-anchor"></a>
@@ -160,79 +137,44 @@
 					<div class="tsd-signature tsd-kind-icon">entrypoint<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L52">types.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L107">types.ts:107</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Entrypoint where commands should be required and extended from.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="hoist" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hoist</h3>
-					<div class="tsd-signature tsd-kind-icon">hoist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="nohoist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> nohoist</h3>
+					<div class="tsd-signature tsd-kind-icon">nohoist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L53">types.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L117">types.ts:117</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L41">types.ts:41</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="optionaldependencies" class="tsd-anchor"></a>
-					<h3>optional<wbr>Dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">optional<wbr>Dependencies<span class="tsd-signature-symbol">:</span> <a href="_types_.imap.html" class="tsd-signature-type">IMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L47">types.ts:47</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Packages that should NOT be hoisted to the root supports globs.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> path</h3>
 					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L49">types.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/5a752eb/src/types.ts#L102">types.ts:102</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="peerdependencies" class="tsd-anchor"></a>
-					<h3>peer<wbr>Dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">peer<wbr>Dependencies<span class="tsd-signature-symbol">:</span> <a href="_types_.imap.html" class="tsd-signature-type">IMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L48">types.ts:48</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="scripts" class="tsd-anchor"></a>
-					<h3>scripts</h3>
-					<div class="tsd-signature tsd-kind-icon">scripts<span class="tsd-signature-symbol">:</span> <a href="_types_.imap.html" class="tsd-signature-type">IMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L44">types.ts:44</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="version" class="tsd-anchor"></a>
-					<h3>version</h3>
-					<div class="tsd-signature tsd-kind-icon">version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/blujedis/gobu/blob/29497e0/src/types.ts#L42">types.ts:42</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The path to package.json</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -333,40 +275,16 @@
 								<a href="_types_.iscope.html#color" class="tsd-kind-icon">color</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#dependencies" class="tsd-kind-icon">dependencies</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#description" class="tsd-kind-icon">description</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#devdependencies" class="tsd-kind-icon">dev<wbr>Dependencies</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_types_.iscope.html#directory" class="tsd-kind-icon">directory</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_types_.iscope.html#entrypoint" class="tsd-kind-icon">entrypoint</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#hoist" class="tsd-kind-icon">hoist</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#optionaldependencies" class="tsd-kind-icon">optional<wbr>Dependencies</a>
+								<a href="_types_.iscope.html#nohoist" class="tsd-kind-icon">nohoist</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_types_.iscope.html#path" class="tsd-kind-icon">path</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#peerdependencies" class="tsd-kind-icon">peer<wbr>Dependencies</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#scripts" class="tsd-kind-icon">scripts</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_types_.iscope.html#version" class="tsd-kind-icon">version</a>
 							</li>
 						</ul>
 					</li>

@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("../utils/helpers");
-function run(spargs, scopes, options) {
-    if (!Array.isArray(scopes)) {
+function runScope(spargs, scopes, options) {
+    if (!Array.isArray(scopes) && typeof scopes !== 'string') {
         options = scopes;
         scopes = undefined;
     }
     scopes = scopes || [];
+    scopes = (!Array.isArray(scopes) ? [scopes] : scopes);
     options = options || {};
     if (!scopes.length) {
         return helpers_1.spawn(helpers_1.pkgmgr, spargs, options);
@@ -23,12 +24,13 @@ function run(spargs, scopes, options) {
         return result;
     }
 }
-function runSync(spargs, scopes, options) {
-    if (!Array.isArray(scopes)) {
+function runScopeSync(spargs, scopes, options) {
+    if (!Array.isArray(scopes) && typeof scopes !== 'string') {
         options = scopes;
         scopes = undefined;
     }
     scopes = scopes || [];
+    scopes = (!Array.isArray(scopes) ? [scopes] : scopes);
     options = options || {};
     if (!scopes.length) {
         return helpers_1.spawnSync(helpers_1.pkgmgr, spargs, options);
@@ -45,7 +47,7 @@ function runSync(spargs, scopes, options) {
         return result;
     }
 }
-function runSpawn(cmd, args, options, sync = false) {
+function runCmd(cmd, args, options, sync = false) {
     if (typeof options === 'boolean') {
         sync = options;
         options = undefined;
@@ -56,8 +58,8 @@ function runSpawn(cmd, args, options, sync = false) {
     return helpers_1.spawn(cmd, args, options);
 }
 exports.runner = {
-    run,
-    runSync,
-    runSpawn
+    runScope,
+    runScopeSync,
+    runCmd
 };
 //# sourceMappingURL=runner.js.map

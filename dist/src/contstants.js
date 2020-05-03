@@ -6,14 +6,12 @@ exports.BASE_DEFAULTS = {
     name: CWD_NAME,
     command: 'gobu',
     workspaces: ['./packages/*'],
-    packageManager: undefined,
     entrypoint: undefined
 };
 exports.CONFIG_DEFAULTS = {
     name: CWD_NAME,
     command: 'gobu',
     workspaces: ['./packages/*'],
-    packageManager: undefined,
     entrypoint: undefined,
     scopes: {},
     commands: {},

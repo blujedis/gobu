@@ -1,5 +1,5 @@
 import { blueBright, cyanBright } from 'ansi-colors';
-import { Help, ICommandItem, ICommand } from '../types';
+import { Help, ICommandItem } from '../types';
 import { buildMenu, buildExample, combineMenuItem } from '../utils';
 
 const help: Help = (pargs, config, commands, isRoot) => {

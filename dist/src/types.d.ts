@@ -30,34 +30,105 @@ export interface ICommand extends ICommandItem {
     action: () => void;
 }
 export interface IPackage {
+    /**
+     * Name of the package.
+     */
     name: string;
+    /**
+     * Description of the package.
+     */
     description?: string;
+    /**
+     * Version of the package.
+     */
     version?: string;
+    /**
+     * Scripts from package.json.
+     */
     scripts: IMap<string>;
+    /**
+     * Package.json dependencies.
+     */
     dependencies: IMap<string>;
+    /**
+     * Package.json development dependencies.
+     */
     devDependencies: IMap<string>;
+    /**
+     * Package.json peer dependencies.
+     */
     peerDependencies: IMap<string>;
+    /**
+     * Package.json optional dependencies.
+     */
     optionalDependencies: IMap<string>;
+    /**
+     * Gobu configuration object.
+     */
     gobu?: IConfigBase;
 }
 export interface IScope extends Omit<IPackage, 'gobu'> {
+    /**
+     * The directory where the scope resides.
+     */
     directory?: string;
+    /**
+     * The path to package.json
+     */
     path?: string;
+    /**
+     * Entrypoint where commands should be required and extended from.
+     */
     entrypoint?: string;
+    /**
+     * The color to use in logs when running async.
+     */
     color?: Styles;
+    /**
+     * Packages that should NOT be hoisted to the root supports globs.
+     */
+    nohoist?: string[];
 }
 export interface IConfigBase {
+    /**
+     * Then name of the repo.
+     */
     name: string;
+    /**
+     * The command name to use (default: gobu)
+     */
     command?: string;
+    /**
+     * Array of globs where workspace/packages reside.
+     */
     workspaces?: string[];
+    /**
+     * Entrypoint where commands should be required and extended from.
+     */
     entrypoint?: string;
-    packageManager?: 'yarn' | 'npm' | 'pnpm' | null;
-    hoist?: string[];
+    /**
+     * Packages that should NOT be hoisted to the root supports globs.
+     */
+    nohoist?: string[];
 }
 export interface IConfig extends IConfigBase, Omit<IScope, 'hoist'> {
+    /**
+     * Map of loaded scopes.
+     */
     scopes?: IMap<IScope>;
+    /**
+     * Map of all commands both internal and extended from repo.
+     */
     commands?: IMap<ICommand>;
+    /**
+     * Indicates if is external config.
+     */
     isExternal?: boolean;
+    /**
+     * The package manager to be used for fallback installations etc.
+     * pnpm will be supported in next minor version.
+     */
+    readonly packageManager?: 'yarn' | 'npm' | null;
 }
 export interface IWriter {
     /**
@@ -117,13 +188,15 @@ export declare type RunnerResult<T> = T & {
     directory: string;
 };
 export interface IRunner {
-    run(spargs: string[], scopes: string[], options?: SpawnOptions): RunnerResult<ChildProcess>[];
-    run(spargs: string[], options?: SpawnOptions): ChildProcess;
-    runSync(spargs: string[], scopes: string[], options?: SpawnSyncOptions): RunnerResult<SpawnSyncReturns<Buffer>>[];
-    runSync(spargs: string[], options?: SpawnSyncOptions): SpawnSyncReturns<Buffer>;
-    runSpawn(cmd: string, args: any[], options: SpawnSyncOptions, sync: boolean): SpawnSyncReturns<Buffer>;
-    runSpawn(cmd: string, args: any[], sync: boolean): SpawnSyncReturns<Buffer>;
-    runSpawn(cmd: string, args: any[], options?: SpawnOptions): ChildProcess;
+    runScope(spargs: string[], scopes: string[], options?: SpawnOptions): RunnerResult<ChildProcess>[];
+    runScope(spargs: string[], scope: string, options?: SpawnOptions): RunnerResult<ChildProcess>[];
+    runScope(spargs: string[], options?: SpawnOptions): ChildProcess;
+    runScopeSync(spargs: string[], scopes: string[], options?: SpawnSyncOptions): RunnerResult<SpawnSyncReturns<Buffer>>[];
+    runScopeSync(spargs: string[], scope: string, options?: SpawnSyncOptions): RunnerResult<SpawnSyncReturns<Buffer>>[];
+    runScopeSync(spargs: string[], options?: SpawnSyncOptions): SpawnSyncReturns<Buffer>;
+    runCmd(cmd: string, args: any[], options: SpawnSyncOptions, sync: boolean): SpawnSyncReturns<Buffer>;
+    runCmd(cmd: string, args: any[], sync: boolean): SpawnSyncReturns<Buffer>;
+    runCmd(cmd: string, args: any[], options?: SpawnOptions): ChildProcess;
 }
 declare type Level = "fatal" | "error" | "warn" | "info" | "debug" | "alert" | "caution" | "notice" | "success";
 export interface ICli {
