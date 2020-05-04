@@ -1,10 +1,13 @@
 {
   "name": "gobu",
   "license": "ISC",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "dist/index.js",
   "bin": {
     "gobu": "./bin/gobu"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "clean": "rimraf dist",
