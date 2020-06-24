@@ -1,8 +1,8 @@
-import { log } from '../utils';
+import { redBright } from 'ansi-colors';
 
 const exceptionHandler = (err) => {
-  log.fatal(err.stack);
-};  
+  process.stderr.write(redBright(err.stack + '\n'));
+};
 
 export function enableExceptions(handler = exceptionHandler) {
 
