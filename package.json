@@ -1,7 +1,7 @@
 {
   "name": "gobu",
   "license": "ISC",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "dist/index.js",
   "bin": {
     "gobu": "./bin/gobu"
@@ -37,10 +37,11 @@
     "kawkah-parser": "^1.0.4",
     "kricket": "^0.1.1",
     "log-symbols": "^3.0.0",
-    "micromatch": "^4.0.2"
+    "micromatch": "^4.0.2",
+    "strip-ansi": "^6.0.0",
+    "wrap-ansi": "^7.0.0"
   },
   "devDependencies": {
-    "@types/ansi-colors": "3.2.2",
     "@types/chai": "^4.2.7",
     "@types/cross-spawn": "^6.0.1",
     "@types/fast-json-stable-stringify": "^2.0.0",
@@ -50,6 +51,7 @@
     "@types/node": "^13.1.2",
     "@types/progress": "^2.0.3",
     "@types/readable-stream": "^2.3.5",
+    "@types/wrap-ansi": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
@@ -58,7 +60,6 @@
     "mocha": "^6.2.2",
     "rimraf": "^3.0.0",
     "ts-node": "^8.5.4",
-    "tslint": "^6.0.0",
     "typedoc": "^0.17.4",
     "typescript": "^3.7.5"
   }

@@ -31,7 +31,7 @@ const bootstrap = (pargs, config) => {
         });
         // Add root directory.
         dirs.unshift(config.directory);
-        const children = tools_1.runner.runScope(spargs, dirs, { stdio: 'inherit' });
+        const children = tools_1.runner.runScopeSync(spargs, dirs, { stdio: 'inherit' });
         children.forEach(child => {
             const scope = map[child.directory];
         });

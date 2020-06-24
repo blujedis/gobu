@@ -6,12 +6,7 @@ import { Logger, LogMethods } from 'kricket';
 export declare type Command = (pargs?: IKawkahParserResult, config?: IConfig, cli?: ICli) => ICommand;
 export declare type Passthrough = (pargs?: IKawkahParserResult, config?: IConfig) => void;
 export declare type Help = (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>, isRoot?: boolean) => string;
-export interface Help2 {
-    (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>, isRoot?: boolean): string;
-    (pargs?: IKawkahParserResult, config?: IConfig, commands?: IMap<ICommand>): string;
-}
-export declare type Filter = RegExp | ((str: string) => boolean);
-export declare type Transform = (val: string) => string;
+export declare type FilterChunk = RegExp | ((chunk: string) => string);
 export declare type Styles = keyof StylesType<any> | keyof StylesType<any>[];
 export interface IMap<T> {
     [key: string]: T;
@@ -130,60 +125,6 @@ export interface IConfig extends IConfigBase, Omit<IScope, 'hoist'> {
      */
     readonly packageManager?: 'yarn' | 'npm' | null;
 }
-export interface IWriter {
-    /**
-     * Gets the max length of an array of string.
-     *
-     * @param vals the values to calculate length for.
-     */
-    maxLength(vals: string[]): number;
-    /**
-     * Pads string to right for alignment.
-     *
-     * @param str the string to be padded.
-     * @param max the max string length of longest item.
-     */
-    padRight(str: string, max?: number): string;
-    /**
-     * Wraps a string limiting line length.
-     *
-     * @param str the string to be wrapped.
-     * @param max the max line length.
-     */
-    wrap(str: string, max?: number): string;
-    /**
-     * Writes/outputs to stdout.
-     *
-     * @param name the name of the scope/project running.
-     * @param transform optional ansi-color.
-     * @param filters array of expressions or functions used to filter.
-     * @param labels all possible prefix labels used for padding.
-     */
-    write(name: string, transform: Transform, filters: Filter[], labels?: string[]): (chunk: string) => void;
-    /**
-     * Writes/outputs to stdout.
-     *
-     * @param name the name of the scope/project running.
-     * @param transform optional ansi-color.
-     * @param labels all possible prefix labels used for padding.
-     */
-    write(name: string, transform: Transform, filters: Filter[], labels?: string[]): (chunk: string) => void;
-    /**
-     * Writes/outputs to stdout.
-     *
-     * @param name the name of the scope/project running.
-     * @param filters array of expressions or functions used to filter.
-     * @param labels all possible prefix labels used for padding.
-     */
-    write(name: string, filters: Filter[], labels?: string[]): (chunk: string) => void;
-    /**
-     * Writes/outputs to stdout.
-     *
-     * @param name the name of the scope/project running.
-     * @param labels all possible prefix labels used for padding.
-     */
-    write(name: string, labels?: string[]): (chunk: string) => void;
-}
 export declare type RunnerResult<T> = T & {
     directory: string;
 };
@@ -212,10 +153,6 @@ export interface ICli {
      * Runs spawn and spawnSync.
      */
     runner: IRunner;
-    /**
-     * Helper for writing out to terminal.
-     */
-    writer: IWriter;
     /**
      * Built in logger.
      */

@@ -12,11 +12,14 @@ const bootstrap_1 = __importDefault(require("./bootstrap"));
 const enable_1 = __importDefault(require("./enable"));
 const help_1 = __importDefault(require("./help"));
 const contstants_1 = require("../contstants");
+const uncaught_1 = __importDefault(require("./uncaught"));
+const disableExceptions = uncaught_1.default();
 const pargs = utils_1.parseArgv();
 let cmd = pargs._[0];
 async function init() {
     let config = await tools_1.load(utils_1.simpleClone(contstants_1.CONFIG_DEFAULTS));
     // Define cli helpers to pass to external commands.
+    // @ts-ignore
     const cli = {
         pargs,
         config,
@@ -27,7 +30,6 @@ async function init() {
             combineItems: utils_1.combineMenuItem
         },
         runner: tools_1.runner,
-        writer: tools_1.writer,
         log: utils_1.log
     };
     // Extend with external commands.
@@ -71,5 +73,6 @@ async function init() {
     }
     return config.commands[cmd].action();
 }
-init().catch(utils_1.catchError);
+init()
+    .catch(utils_1.catchError);
 //# sourceMappingURL=index.js.map

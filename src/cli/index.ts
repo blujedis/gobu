@@ -2,7 +2,7 @@
 import {
   parseArgv, buildExample, buildMenu, pkgmgr, log, combineMenuItem, simpleClone, catchError,
 } from '../utils';
-import { externalCommands, load, runner, writer } from '../tools';
+import { externalCommands, load, runner } from '../tools';
 import { ICli, IConfig } from '../types';
 import exec from './exec';
 import passthrough from './passthrough';
@@ -10,7 +10,9 @@ import bootstrap from './bootstrap';
 import enable from './enable';
 import help from './help';
 import { CONFIG_DEFAULTS } from '../contstants';
+import enableExceptions from './uncaught';
 
+const disableExceptions = enableExceptions();
 const pargs = parseArgv();
 let cmd = pargs._[0];
 
@@ -19,6 +21,7 @@ async function init() {
   let config = await load(simpleClone(CONFIG_DEFAULTS)) as IConfig;
 
   // Define cli helpers to pass to external commands.
+  // @ts-ignore
   const cli: ICli = {
     pargs,
     config,
@@ -29,7 +32,6 @@ async function init() {
       combineItems: combineMenuItem
     },
     runner,
-    writer,
     log
   };
 
@@ -82,4 +84,5 @@ async function init() {
 
 }
 
-init().catch(catchError);
+init()
+  .catch(catchError);

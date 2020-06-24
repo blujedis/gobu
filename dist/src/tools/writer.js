@@ -1,5 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const readable_stream_1 = require("readable-stream");
+const strip_ansi_1 = __importDefault(require("strip-ansi"));
+const wrap_ansi_1 = __importDefault(require("wrap-ansi"));
 /**
  * Gets the max length of an array of string.
  *
@@ -13,6 +19,7 @@ function maxLength(vals) {
         return a;
     }, 0);
 }
+exports.maxLength = maxLength;
 /**
  * Pads string to right for alignment.
  *
@@ -20,80 +27,56 @@ function maxLength(vals) {
  * @param max the max string length of longest item.
  */
 function padRight(str, max = 13) {
-    if (str.length < max)
-        return ' '.repeat(max - str.length);
-    return '';
+    const stripped = strip_ansi_1.default(str);
+    if (stripped.length < max)
+        return str + ' '.repeat(max - stripped.length);
+    return str;
 }
-/**
- * Wraps a string limiting line length.
- *
- * @param str the string to be wrapped.
- * @param max the max line length.
- */
-function wrap(str, max = 90) {
-    if (str.length < max)
-        return str;
-    function recurse(v, lines = []) {
-        lines.push(v.slice(0, max));
-        const rem = v.slice(max);
-        if (rem.length < max) {
-            lines.push(rem);
-            return lines.join('\n');
-        }
-        return recurse(rem, lines).join('\n');
-    }
-    return recurse(str);
-}
-function write(name, transform, filters = [], labels = []) {
-    if (Array.isArray(transform)) {
-        if (typeof transform[0] === 'string')
-            labels = transform;
-        else
-            filters = transform;
-        transform = undefined;
-    }
-    if (typeof filters[0] === 'string') {
-        labels = filters;
+exports.padRight = padRight;
+function createTransform(prefix, filters, options) {
+    if (!Array.isArray(filters)) {
+        options = filters;
         filters = undefined;
     }
-    transform = transform || ((v) => v);
-    filters = filters || [];
-    labels = labels || [];
-    const padLen = labels.length ? maxLength(labels) : 0;
-    return (chunk) => {
-        // Remove trailing line return.
-        chunk = (chunk.toString() || '')
-            .replace(/\\n$/, '');
-        // Check if is filtered before formatting.
-        const filtered = filters.some(v => {
-            if (v instanceof RegExp)
-                return v.test(chunk);
-            return v(chunk);
-        });
-        // Remove empty lines.
-        if (!chunk || !chunk.length || filtered)
-            return;
-        // Split rows and format, wrap if too long.
-        chunk = chunk.split('\n')
+    if (filters && !Array.isArray(filters))
+        filters = [filters];
+    prefix = prefix || '';
+    options = options || {};
+    // Set a sane value if nothing is set. 
+    options.maxPrefix = typeof options.maxPrefix !== 'undefined' ? options.maxPrefix : 16;
+    options.maxLine = options.maxLine || 90;
+    options.encoding = options.encoding || 'utf8';
+    const stream = new readable_stream_1.Transform(options);
+    const { maxLine, maxPrefix } = options;
+    prefix = padRight(prefix, maxPrefix);
+    const prefixLen = strip_ansi_1.default(prefix).length;
+    const padStr = ' '.repeat(prefixLen);
+    const wrap = (str) => {
+        return wrap_ansi_1.default(str, maxLine - prefixLen)
+            .split('\n')
+            .map((line, i) => {
+            if (i === 0)
+                return prefix + line;
+            return padStr + line;
+        }).join('\n');
+    };
+    const parseChunk = (chunk) => {
+        return chunk.split('\n')
             .reduce((a, c) => {
             // Empty line ignore.
             if (!c || !c.length || c === '')
                 return a;
-            // Need to debug this to pretty it up.
-            // if (c.length > maxLine)
-            //   c = wrap(c);
-            const suffix = padRight(name, padLen) + ' ' + c;
-            c = transform(name) + suffix;
+            // If too long wrap the line.
+            c = wrap(c);
             return [...a, c];
-        }, [])
-            .join('\n');
-        process.stderr.write(chunk + '\n');
+        }, []).join('\n');
     };
+    stream._transform = (chunk, encoding, done) => {
+        chunk = (encoding === 'utf8' ? chunk : chunk.toString());
+        done(null, parseChunk(chunk) + '\n');
+    };
+    return stream;
 }
-exports.writer = {
-    maxLength,
-    padRight,
-    wrap,
-    write
-};
+exports.createTransform = createTransform;
+;
 //# sourceMappingURL=writer.js.map

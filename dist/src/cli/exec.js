@@ -12,6 +12,7 @@ const exec = (pargs, config) => {
     pargs._raw.shift(); // first arg is "exec" we don't need it.
     const script = pargs._raw[0]; // the script name to be run.
     let scopes = utils_1.normalizeScopes(pargs.scope || pargs.scopes);
+    const scopeNames = [...scopes];
     scopes = scopes.length ? scopes : Object.keys(config.scopes).map(k => config.scopes[k].name);
     const isParallel = (pargs.p || pargs.parallel);
     const isRoot = utils_1.isScope(config.directory);
@@ -33,6 +34,7 @@ const exec = (pargs, config) => {
         // Map of directory to scope
         // used for managing child processes.
         const map = {};
+        const maxPrefix = tools_1.maxLength(scopeNames) + 2;
         const dirs = utils_1.getScopesByName(scopes, config.scopes).filter((s, i) => {
             if (!s) {
                 missing.push(scopes[i]);
@@ -54,22 +56,20 @@ const exec = (pargs, config) => {
             utils_1.log.caution(`Skipping scope(s) "${missing.join(', ')}" unknown or missing script "${script}".`);
         }
         if (isParallel) {
-            const options = {};
-            if (!isParallel)
-                options.stdio = 'inherit';
             const children = tools_1.runner.runScope(spargs, dirs);
             const nums = [];
             children.forEach(child => {
                 const scope = map[child.directory];
                 const num = utils_1.randomNumber(0, contstants_1.BASE_COLORS.length, nums);
                 nums.push(num);
-                const transform = ansi_colors_1.default[scope.color] || ansi_colors_1.default[contstants_1.BASE_COLORS[num]];
-                if (child.stdout && child.stdout.on) {
-                    child.stdout.on('data', tools_1.writer.write(scope.name, transform, scopes));
-                    child.stdout.on('error', tools_1.writer.write(scope.name, transform, scopes));
+                const prefix = ansi_colors_1.default[scope.color] || ansi_colors_1.default[contstants_1.BASE_COLORS[num]];
+                const out = tools_1.createTransform(prefix(scope.name), { maxPrefix });
+                const err = tools_1.createTransform(prefix(scope.name), { maxPrefix });
+                if (child.stdout) {
+                    child.stdout.pipe(out).pipe(process.stdout);
                 }
-                if (child.stderr && child.stderr.on) {
-                    child.stderr.on('data', tools_1.writer.write(scope.name, transform, scopes));
+                if (child.stderr) {
+                    child.stderr.pipe(err).pipe(process.stderr);
                 }
             });
         }

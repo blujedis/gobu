@@ -1,5 +1,5 @@
 import { isScope, normalizeScopes, log, getScopesByName, randomNumber, simpleClone } from '../utils';
-import { runner, writer } from '../tools';
+import { runner, createTransform, maxLength, padRight } from '../tools';
 import ansi from 'ansi-colors';
 import { BASE_COLORS } from '../contstants';
 import help from './help';
@@ -10,6 +10,7 @@ const exec: Command = (pargs, config) => {
   pargs._raw.shift(); // first arg is "exec" we don't need it.
   const script = pargs._raw[0]; // the script name to be run.
   let scopes = normalizeScopes(pargs.scope || pargs.scopes);
+  const scopeNames = [...scopes];
   scopes = scopes.length ? scopes : Object.keys(config.scopes).map(k => config.scopes[k].name);
   const isParallel = (pargs.p || pargs.parallel) as boolean;
   const isRoot = isScope(config.directory);
@@ -39,6 +40,7 @@ const exec: Command = (pargs, config) => {
     // used for managing child processes.
     const map: IMap<IScope> = {};
 
+    const maxPrefix = maxLength(scopeNames) + 2;
 
     const dirs = getScopesByName(scopes, config.scopes).filter((s, i) => {
       if (!s) {
@@ -63,23 +65,29 @@ const exec: Command = (pargs, config) => {
     }
 
     if (isParallel) {
-      const options: any = {};
-      if (!isParallel)
-        options.stdio = 'inherit';
+
       const children = runner.runScope(spargs, dirs);
       const nums = [];
+
       children.forEach(child => {
+
         const scope = map[child.directory];
         const num = randomNumber(0, BASE_COLORS.length, nums);
         nums.push(num);
-        const transform = ansi[scope.color] || ansi[BASE_COLORS[num]];
-        if (child.stdout && child.stdout.on) {
-          child.stdout.on('data', writer.write(scope.name, transform, scopes));
-          child.stdout.on('error', writer.write(scope.name, transform, scopes));
+
+        const prefix = ansi[scope.color] || ansi[BASE_COLORS[num]];
+        const out = createTransform(prefix(scope.name), { maxPrefix });
+        const err = createTransform(prefix(scope.name), { maxPrefix });
+
+        if (child.stdout) {
+          child.stdout.pipe(out).pipe(process.stdout);
         }
-        if (child.stderr && child.stderr.on) {
-          child.stderr.on('data', writer.write(scope.name, transform, scopes));
+
+        if (child.stderr) {
+          child.stderr.pipe(err).pipe(process.stderr);
+
         }
+
       });
     }
     else {

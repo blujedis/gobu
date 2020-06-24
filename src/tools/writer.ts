@@ -1,11 +1,16 @@
-import { Filter, IWriter, Transform } from '../types';
+import { FilterChunk } from '../types';
+import { Transform, TransformOptions } from 'readable-stream';
+import strip from 'strip-ansi';
+import wrapansi from 'wrap-ansi';
+
+export type TransformOptionsExt = TransformOptions & { maxPrefix?: number, maxLine?: number; };
 
 /**
  * Gets the max length of an array of string.
  * 
  * @param vals the values to calculate length for.
  */
-function maxLength(vals: string[]) {
+export function maxLength(vals: string[]) {
   return vals.reduce((a, c) => {
     c = c || '';
     if (c.length > a)
@@ -20,143 +25,72 @@ function maxLength(vals: string[]) {
  * @param str the string to be padded.
  * @param max the max string length of longest item.
  */
-function padRight(str: string, max: number = 13) {
-  if (str.length < max)
-    return ' '.repeat(max - str.length);
-  return '';
+export function padRight(str: string, max: number = 13) {
+  const stripped = strip(str);
+  if (stripped.length < max)
+    return str + ' '.repeat(max - stripped.length);
+  return str;
 }
 
-/**
- * Wraps a string limiting line length.
- * 
- * @param str the string to be wrapped.
- * @param max the max line length.  
- */
-function wrap(str: string, max: number = 90) {
+export function createTransform(prefix: string, filters: FilterChunk[], options?: TransformOptionsExt): Transform;
 
-  if (str.length < max)
-    return str;
+export function createTransform(prefix: string, filter: FilterChunk, options?: TransformOptionsExt): Transform;
 
-  function recurse(v, lines = []) {
+export function createTransform(prefix: string, options?: TransformOptionsExt): Transform;
 
-    lines.push(v.slice(0, max));
-    const rem = v.slice(max);
+export function createTransform(prefix: string, filters: FilterChunk | FilterChunk[] | TransformOptions, options?: TransformOptionsExt) {
 
-    if (rem.length < max) {
-      lines.push(rem);
-      return lines.join('\n');
-    }
-
-    return recurse(rem, lines).join('\n');
-
-  }
-
-  return recurse(str);
-
-}
-
-/**
- * Writes/outputs to stdout.
- * 
- * @param name the name of the scope/project running.
- * @param transform optional ansi-color.
- * @param filters array of expressions or functions used to filter.
- * @param labels all possible prefix labels used for padding.
- */
-function write(name: string, transform: Transform, filters: Filter[], labels?: string[]): (chunk: string) => void;
-
-/**
- * Writes/outputs to stdout.
- * 
- * @param name the name of the scope/project running.
- * @param transform optional ansi-color.
- * @param labels all possible prefix labels used for padding.
- */
-function write(name: string, transform: Transform, filters: Filter[], labels?: string[]): (chunk: string) => void;
-
-/**
- * Writes/outputs to stdout.
- * 
- * @param name the name of the scope/project running.
- * @param filters array of expressions or functions used to filter.
- * @param labels all possible prefix labels used for padding.
- */
-function write(name: string, filters: Filter[], labels?: string[]): (chunk: string) => void;
-
-/**
- * Writes/outputs to stdout.
- * 
- * @param name the name of the scope/project running.
- * @param labels all possible prefix labels used for padding.
- */
-function write(name: string, labels?: string[]): (chunk: string) => void;
-function write(name: string, transform?: Transform | (Filter | string)[], filters: (string | Filter)[] = [], labels: string[] = []) {
-
-  if (Array.isArray(transform)) {
-    if (typeof transform[0] === 'string')
-      labels = transform as string[];
-    else
-      filters = transform as Filter[];
-    transform = undefined;
-  }
-
-  if (typeof filters[0] === 'string') {
-    labels = filters as string[];
+  if (!Array.isArray(filters)) {
+    options = filters as TransformOptionsExt;
     filters = undefined;
   }
 
-  transform = transform || ((v) => v);
-  filters = filters || [];
-  labels = labels || [];
-  const padLen = labels.length ? maxLength(labels) : 0;
+  if (filters && !Array.isArray(filters))
+    filters = [filters as FilterChunk];
 
-  return (chunk) => {
+  prefix = prefix || '';
+  options = options || {};
 
-    // Remove trailing line return.
-    chunk = (chunk.toString() || '')
-      .replace(/\\n$/, '');
+  // Set a sane value if nothing is set. 
+  options.maxPrefix = typeof options.maxPrefix !== 'undefined' ? options.maxPrefix : 16;
+  options.maxLine = options.maxLine || 90;
+  options.encoding = options.encoding || 'utf8';
 
-    // Check if is filtered before formatting.
-    const filtered = (filters as Filter[]).some(v => {
-      if (v instanceof RegExp)
-        return v.test(chunk);
-      return v(chunk);
-    });
+  const stream = new Transform(options);
+  const { maxLine, maxPrefix } = options;
+  prefix = padRight(prefix, maxPrefix);
+  const prefixLen = strip(prefix).length;
+  const padStr = ' '.repeat(prefixLen);
 
-    // Remove empty lines.
-    if (!chunk || !chunk.length || filtered)
-      return;
+  const wrap = (str: string) => {
+    return wrapansi(str, maxLine - prefixLen)
+      .split('\n')
+      .map((line, i) => {
+        if (i === 0)
+          return prefix + line;
+        return padStr + line;
+      }).join('\n');
+  };
 
-    // Split rows and format, wrap if too long.
-    chunk = chunk.split('\n')
+
+  const parseChunk = (chunk) => {
+    return chunk.split('\n')
       .reduce((a, c) => {
-
         // Empty line ignore.
         if (!c || !c.length || c === '')
           return a;
-
-        // Need to debug this to pretty it up.
-        // if (c.length > maxLine)
-        //   c = wrap(c);
-
-        const suffix = padRight(name, padLen) + ' ' + c;
-        c = (transform as Transform)(name) + suffix;
+        // If too long wrap the line.
+        c = wrap(c);
         return [...a, c];
-
-      }, [])
-      .join('\n');
-
-    process.stderr.write(chunk + '\n');
-
+      }, []).join('\n');
   };
 
-}
+  stream._transform = (chunk, encoding, done) => {
+    chunk = (encoding === 'utf8' ? chunk : chunk.toString());
+    done(null, parseChunk(chunk) + '\n');
+  };
 
+  return stream;
 
-export const writer: IWriter = {
-  maxLength,
-  padRight,
-  wrap,
-  write
 };
 

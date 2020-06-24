@@ -13,10 +13,10 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint",
-    "@typescript-eslint/tslint"
+    "@typescript-eslint"
   ],
   "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/ban-types": "off",
@@ -118,6 +118,7 @@ module.exports = {
     "no-unsafe-finally": "error",
     "no-unused-expressions": "error",
     "no-unused-labels": "error",
+    "no-unused-vars": "off"
     "no-var": "error",
     "object-shorthand": "error",
     "one-var": [
@@ -133,29 +134,6 @@ module.exports = {
     "space-in-parens": "off",
     "spaced-comment": "error",
     "use-isnan": "error",
-    "valid-typeof": "off",
-    "@typescript-eslint/tslint/config": [
-      "error",
-      {
-        "rules": {
-          "jsdoc-format": [
-            true,
-            "check-multiline-start"
-          ],
-          "no-reference-import": true,
-          "whitespace": [
-            true,
-            "check-branch",
-            "check-decl",
-            "check-operator",
-            "check-separator",
-            "check-type",
-            "check-typecast",
-            "check-type-operator",
-            "check-rest-spread"
-          ]
-        }
-      }
-    ]
+    "valid-typeof": "off"
   }
 };
